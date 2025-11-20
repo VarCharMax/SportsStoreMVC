@@ -44,7 +44,9 @@ CodeCoverage/
 # MSBuild Binary and Structured Log
 *.binlog
 
+# VS Code
 .vs/
+.vs/**
 
 
 # MSTest test Results
