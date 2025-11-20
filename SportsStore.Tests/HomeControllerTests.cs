@@ -15,7 +15,7 @@ namespace SportsStore.Tests
     [Fact]
     public void CanUseRepository()
     {
-      IQueryable<Product> testData = (new Product[]
+      var testData = (new Product[]
         {
           new() { ProductID = 1, Name = "P1", Price = 73.10M },
           new() { ProductID = 2, Name = "P2", Price = 120M },
@@ -34,8 +34,8 @@ namespace SportsStore.Tests
                       as IEnumerable<Product>;
 
       //Assert
-      Product[] prodArray = result?.ToArray()
-                ?? [];
+      Product[] prodArray = result?.ToArray() ?? [];
+
       Assert.Equal(3, prodArray.Length);
       Assert.Equal("P1", prodArray[0].Name);
       Assert.Equal("P2", prodArray[1].Name);
@@ -44,15 +44,17 @@ namespace SportsStore.Tests
     [Fact]
     public void Can_Paginate()
     {
-      // Arrange
-      Mock<IStoreRepository> mock = new();
-      mock.Setup(m => m.Products).Returns((new Product[] {
+      var testData = (new Product[] {
                 new() {ProductID = 1, Name = "P1"},
                 new() {ProductID = 2, Name = "P2"},
                 new() {ProductID = 3, Name = "P3"},
                 new() {ProductID = 4, Name = "P4"},
                 new() {ProductID = 5, Name = "P5"}
-            }).AsQueryable<Product>());
+            }).AsQueryable<Product>();
+
+      // Arrange
+      Mock<IStoreRepository> mock = new();
+      mock.Setup(m => m.Products).Returns(testData);
 
       HomeController controller = new(mock.Object)
       {
