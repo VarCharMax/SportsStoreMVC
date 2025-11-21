@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore", "SportsStore\SportsStore.csproj", "{5F9BC872-FB9A-4EA6-B739-140886B96D4C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SportsStore.Tests", "SportsStore.Tests", "{F4DE8BE2-11C7-1F47-1088-2ACDDC014634}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Tests", "SportsStore.Tests\SportsStore.Tests.csproj", "{FC5374B3-6352-4B8A-8FB1-113733F093EC}"
 EndProject
 Global
