@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
+using SportsStore.Components;
 using SportsStore.Controllers;
 using SportsStore.Infrastructure;
 using SportsStore.Models;
@@ -183,6 +185,32 @@ namespace SportsStore.Tests
       Assert.Equal(2, result.Length);
       Assert.True(result[0].Name == "P2" && result[0].Category == "Cat2");
       Assert.True(result[1].Name == "P4" && result[1].Category == "Cat2");
+    }
+
+    [Fact]
+    public void Can_Select_Categories()
+    {
+      // Arrange
+      Mock<IStoreRepository> mock = new();
+      mock.Setup(m => m.Products).Returns((new Product[] {
+                new() {ProductID = 1, Name = "P1",
+                    Category = "Apples"},
+                new() {ProductID = 2, Name = "P2",
+                    Category = "Apples"},
+                new() {ProductID = 3, Name = "P3",
+                    Category = "Plums"},
+                new() {ProductID = 4, Name = "P4",
+                    Category = "Oranges"},
+            }).AsQueryable());
+
+      NavigationMenuViewComponent target = new(mock.Object);
+
+      // Act = get the set of categories
+      string[] results = [.. (IEnumerable<string>?)(target.Invoke()
+         as ViewViewComponentResult)?.ViewData?.Model ?? []];
+
+      // Assert
+      Assert.True(Enumerable.SequenceEqual(["Apples", "Oranges", "Plums"], results));
     }
   }
 }
