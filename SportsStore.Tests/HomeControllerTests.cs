@@ -212,5 +212,39 @@ namespace SportsStore.Tests
       // Assert
       Assert.True(Enumerable.SequenceEqual(["Apples", "Oranges", "Plums"], results));
     }
+
+    [Fact]
+    public void Indicates_Selected_Category()
+    {
+      // Arrange
+      string categoryToSelect = "Apples";
+      Mock<IStoreRepository> mock = new();
+
+      mock.Setup(m => m.Products).Returns((new Product[] {
+        new() {ProductID = 1, Name = "P1", Category = "Apples"},
+        new() {ProductID = 4, Name = "P2", Category = "Oranges"},
+    }).AsQueryable());
+
+      NavigationMenuViewComponent target =
+          new(mock.Object)
+          {
+            ViewComponentContext = new ViewComponentContext
+            {
+              ViewContext = new ViewContext
+              {
+                RouteData = new Microsoft.AspNetCore.Routing.RouteData()
+              }
+            }
+          };
+
+      target.RouteData.Values["category"] = categoryToSelect;
+
+      // Action
+      string? result = (string?)(target.Invoke()
+          as ViewViewComponentResult)?.ViewData?["SelectedCategory"];
+
+      // Assert
+      Assert.Equal(categoryToSelect, result);
+    }
   }
 }
