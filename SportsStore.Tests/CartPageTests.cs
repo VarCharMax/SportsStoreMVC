@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
@@ -7,6 +8,7 @@ using SportsStore.Models;
 using SportsStore.Pages;
 using System.Text;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Tests
 {
@@ -54,6 +56,49 @@ namespace SportsStore.Tests
       //Assert
       Assert.Equal(2, cartModel.Cart?.Lines.Count);
       Assert.Equal("myUrl", cartModel.ReturnUrl);
+    }
+
+    [Fact]
+    public void Can_Update_Cart()
+    {
+      // Arrange
+      // - create a mock repository
+      Mock<IStoreRepository> mockRepo = new();
+
+      mockRepo.Setup(m => m.Products).Returns((new Product[] {
+        new Product { ProductID = 1, Name = "P1" }
+        }).AsQueryable());
+
+      Cart? testCart = new();
+
+      Mock<ISession> mockSession = new();
+
+      mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
+          .Callback<string, byte[]>((key, val) => {
+            testCart = JsonSerializer.Deserialize<Cart>(
+              Encoding.UTF8.GetString(val));
+          });
+
+      Mock<HttpContext> mockContext = new();
+
+      mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
+
+      // Action
+      CartModel cartModel = new(mockRepo.Object)
+      {
+        PageContext = new PageContext(new ActionContext
+        {
+          HttpContext = mockContext.Object,
+          RouteData = new RouteData(),
+          ActionDescriptor = new PageActionDescriptor()
+        })
+      };
+      cartModel.OnPost(1, "myUrl");
+
+      //Assert
+      Assert.Single(testCart.Lines);
+      Assert.Equal("P1", testCart.Lines.First().Product.Name);
+      Assert.Equal(1, testCart.Lines.First().Quantity);
     }
   }
 }
