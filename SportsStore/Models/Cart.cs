@@ -2,7 +2,7 @@
 {
   public class Cart
   {
-    public List<CartLine> Lines { get; set; } = new List<CartLine>();
+    public List<CartLine> Lines { get; set; } = [];
 
     public virtual void AddItem(Product product, int quantity)
     {

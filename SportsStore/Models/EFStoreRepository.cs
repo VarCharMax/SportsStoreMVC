@@ -1,12 +1,8 @@
 namespace SportsStore.Models
 {
-  public class EFStoreRepository : IStoreRepository
+  public class EFStoreRepository(StoreDbContext ctx) : IStoreRepository
   {
-    private StoreDbContext context;
-
-    public EFStoreRepository(StoreDbContext ctx) {
-      context = ctx;
-    }
+    private readonly StoreDbContext context = ctx;
 
     public IQueryable<Product> Products => context.Products;
   }
