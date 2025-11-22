@@ -11,7 +11,7 @@ builder.Services.AddDbContext<StoreDbContext>(options =>
         throw new InvalidOperationException("Connection string 'SportsStoreConnection' not found.")));
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
-builder.Services.AddScoped<Cart>(SessionCart.GetCart);
+builder.Services.AddScoped(SessionCart.GetCart);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddRazorPages();
