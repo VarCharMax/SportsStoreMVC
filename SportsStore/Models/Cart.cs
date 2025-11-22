@@ -12,7 +12,7 @@
 
       if (line == null)
       {
-        Lines.Add(new CartLine
+        Lines.Add(new()
         {
           Product = product,
           Quantity = quantity
@@ -25,11 +25,9 @@
     }
 
     public virtual void RemoveLine(Product product) =>
-            Lines.RemoveAll(l => l.Product.ProductID
-                == product.ProductID);
+            Lines.RemoveAll(l => l.Product.ProductID == product.ProductID);
 
-    public decimal ComputeTotalValue() =>
-        Lines.Sum(e => e.Product.Price * e.Quantity);
+    public decimal ComputeTotalValue() => Lines.Sum(e => e.Product.Price * e.Quantity);
 
     public virtual void Clear() => Lines.Clear();
   }
