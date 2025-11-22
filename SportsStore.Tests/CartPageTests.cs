@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Routing;
@@ -8,7 +7,6 @@ using SportsStore.Models;
 using SportsStore.Pages;
 using System.Text;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Tests
 {
@@ -18,39 +16,19 @@ namespace SportsStore.Tests
     public void Can_Load_Cart()
     {
       // Arrange
-      // - create a mock repository
       Product p1 = new() { ProductID = 1, Name = "P1" };
       Product p2 = new() { ProductID = 2, Name = "P2" };
       Mock<IStoreRepository> mockRepo = new();
 
-      mockRepo.Setup(m => m.Products).Returns((new Product[] {
-                p1, p2
-            }).AsQueryable());
+      mockRepo.Setup(m => m.Products).Returns((new Product[] { p1, p2 }).AsQueryable());
 
       // - create a cart 
       Cart testCart = new();
       testCart.AddItem(p1, 2);
       testCart.AddItem(p2, 1);
 
-      // - create a mock page context and session
-      Mock<ISession> mockSession = new();
-      byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(testCart));
-
-      mockSession.Setup(c => c.TryGetValue(It.IsAny<string>(), out data!));
-
-      Mock<HttpContext> mockContext = new();
-      mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-
       // Action
-      CartModel cartModel = new(mockRepo.Object)
-      {
-        PageContext = new PageContext(new ActionContext
-        {
-          HttpContext = mockContext.Object,
-          RouteData = new RouteData(),
-          ActionDescriptor = new PageActionDescriptor()
-        })
-      };
+      CartModel cartModel = new(mockRepo.Object, testCart);
       cartModel.OnGet("myUrl");
 
       //Assert
@@ -66,33 +44,14 @@ namespace SportsStore.Tests
       Mock<IStoreRepository> mockRepo = new();
 
       mockRepo.Setup(m => m.Products).Returns((new Product[] {
-        new Product { ProductID = 1, Name = "P1" }
+        new() { ProductID = 1, Name = "P1" }
         }).AsQueryable());
 
       Cart? testCart = new();
 
-      Mock<ISession> mockSession = new();
-
-      mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
-          .Callback<string, byte[]>((key, val) => {
-            testCart = JsonSerializer.Deserialize<Cart>(
-              Encoding.UTF8.GetString(val));
-          });
-
-      Mock<HttpContext> mockContext = new();
-
-      mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-
       // Action
-      CartModel cartModel = new(mockRepo.Object)
-      {
-        PageContext = new PageContext(new ActionContext
-        {
-          HttpContext = mockContext.Object,
-          RouteData = new RouteData(),
-          ActionDescriptor = new PageActionDescriptor()
-        })
-      };
+      CartModel cartModel = new(mockRepo.Object, testCart);
+      
       cartModel.OnPost(1, "myUrl");
 
       //Assert
