@@ -46,12 +46,12 @@ namespace SportsStore.Tests
     public void Can_Paginate()
     {
       var testData = (new Product[] {
-                new() {ProductID = 1, Name = "P1"},
-                new() {ProductID = 2, Name = "P2"},
-                new() {ProductID = 3, Name = "P3"},
-                new() {ProductID = 4, Name = "P4"},
-                new() {ProductID = 5, Name = "P5"}
-            }).AsQueryable();
+          new() {ProductID = 1, Name = "P1"},
+          new() {ProductID = 2, Name = "P2"},
+          new() {ProductID = 3, Name = "P3"},
+          new() {ProductID = 4, Name = "P4"},
+          new() {ProductID = 5, Name = "P5"}
+      }).AsQueryable();
 
       // Arrange
       Mock<IStoreRepository> mock = new();
@@ -179,15 +179,11 @@ namespace SportsStore.Tests
       // Arrange
       Mock<IStoreRepository> mock = new();
       mock.Setup(m => m.Products).Returns((new Product[] {
-                new() {ProductID = 1, Name = "P1",
-                    Category = "Apples"},
-                new() {ProductID = 2, Name = "P2",
-                    Category = "Apples"},
-                new() {ProductID = 3, Name = "P3",
-                    Category = "Plums"},
-                new() {ProductID = 4, Name = "P4",
-                    Category = "Oranges"},
-            }).AsQueryable());
+        new() {ProductID = 1, Name = "P1", Category = "Apples"},
+        new() {ProductID = 2, Name = "P2", Category = "Apples"},
+        new() {ProductID = 3, Name = "P3", Category = "Plums"},
+        new() {ProductID = 4, Name = "P4", Category = "Oranges"},
+      }).AsQueryable());
 
       NavigationMenuViewComponent target = new(mock.Object);
 
