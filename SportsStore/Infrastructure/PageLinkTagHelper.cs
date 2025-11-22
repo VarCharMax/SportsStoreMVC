@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using SportsStore.Models.ViewModels;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Infrastructure
 {
@@ -23,8 +21,7 @@ namespace SportsStore.Infrastructure
     public string? PageAction { get; set; }
 
     [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
-    public Dictionary<string, object> PageUrlValues { get; set; }
-            = [];
+    public Dictionary<string, object> PageUrlValues { get; set; } = [];
 
     public bool PageClassesEnabled { get; set; } = false;
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
@@ -10,7 +9,6 @@ using SportsStore.Controllers;
 using SportsStore.Infrastructure;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Tests
 {
@@ -65,8 +63,7 @@ namespace SportsStore.Tests
       };
 
       // Act
-      ProductsListViewModel result = controller.Index(null, 2)?
-        .ViewData.Model as ProductsListViewModel ?? new();
+      ProductsListViewModel result = controller.Index(null, 2)?.ViewData.Model as ProductsListViewModel ?? new();
 
       // Assert
       Product[] prodArray = [.. result.Products];
@@ -105,19 +102,11 @@ namespace SportsStore.Tests
         PageAction = "Test"
       };
 
-      TagHelperContext ctx = new(
-          [],
-          new Dictionary<object, object>(),
-          ""
-      );
+      TagHelperContext ctx = new([], new Dictionary<object, object>(), "");
 
       var content = new Mock<TagHelperContent>();
 
-      TagHelperOutput output = new(
-        "div",
-        [],
-        (cache, encoder) => Task.FromResult(content.Object)
-      );
+      TagHelperOutput output = new("div", [], (cache, encoder) => Task.FromResult(content.Object));
 
       // Act
       helper.Process(ctx, output);
@@ -145,9 +134,7 @@ namespace SportsStore.Tests
       HomeController controller = new(mock.Object) { PageSize = 3 };
 
       // Act
-      ProductsListViewModel result =
-          controller.Index(null, 2)?.ViewData.Model as ProductsListViewModel
-              ?? new();
+      ProductsListViewModel result = controller.Index(null, 2)?.ViewData.Model as ProductsListViewModel ?? new();
 
       // Assert
       PagingInfo pageInfo = result.PagingInfo;
@@ -178,8 +165,7 @@ namespace SportsStore.Tests
       };
 
       // Action
-      Product[] result = [.. (controller.Index("Cat2", 1)?.ViewData.Model
-          as ProductsListViewModel ?? new()).Products];
+      Product[] result = [.. (controller.Index("Cat2", 1)?.ViewData.Model as ProductsListViewModel ?? new()).Products];
 
       // Assert
       Assert.Equal(2, result.Length);
@@ -206,8 +192,7 @@ namespace SportsStore.Tests
       NavigationMenuViewComponent target = new(mock.Object);
 
       // Act = get the set of categories
-      string[] results = [.. (IEnumerable<string>?)(target.Invoke()
-         as ViewViewComponentResult)?.ViewData?.Model ?? []];
+      string[] results = [.. (IEnumerable<string>?)(target.Invoke() as ViewViewComponentResult)?.ViewData?.Model ?? []];
 
       // Assert
       Assert.True(Enumerable.SequenceEqual(["Apples", "Oranges", "Plums"], results));
@@ -223,7 +208,7 @@ namespace SportsStore.Tests
       mock.Setup(m => m.Products).Returns((new Product[] {
         new() {ProductID = 1, Name = "P1", Category = "Apples"},
         new() {ProductID = 4, Name = "P2", Category = "Oranges"},
-    }).AsQueryable());
+      }).AsQueryable());
 
       NavigationMenuViewComponent target =
           new(mock.Object)
@@ -240,8 +225,7 @@ namespace SportsStore.Tests
       target.RouteData.Values["category"] = categoryToSelect;
 
       // Action
-      string? result = (string?)(target.Invoke()
-          as ViewViewComponentResult)?.ViewData?["SelectedCategory"];
+      string? result = (string?)(target.Invoke() as ViewViewComponentResult)?.ViewData?["SelectedCategory"];
 
       // Assert
       Assert.Equal(categoryToSelect, result);
@@ -251,7 +235,7 @@ namespace SportsStore.Tests
     public void Generate_Category_Specific_Product_Count()
     {
       // Arrange
-      Mock<IStoreRepository> mock = new Mock<IStoreRepository>();
+      Mock<IStoreRepository> mock = new();
 
       mock.Setup(m => m.Products).Returns((new Product[] {
         new() {ProductID = 1, Name = "P1", Category = "Cat1"},
@@ -259,15 +243,14 @@ namespace SportsStore.Tests
         new() {ProductID = 3, Name = "P3", Category = "Cat1"},
         new() {ProductID = 4, Name = "P4", Category = "Cat2"},
         new() {ProductID = 5, Name = "P5", Category = "Cat3"}
-    }).AsQueryable());
+      }).AsQueryable());
 
       HomeController target = new(mock.Object)
       {
         PageSize = 3
       };
 
-      static ProductsListViewModel? GetModel(ViewResult result) 
-        => result?.ViewData?.Model as ProductsListViewModel;
+      static ProductsListViewModel? GetModel(ViewResult result) => result?.ViewData?.Model as ProductsListViewModel;
 
       // Action
       int? res1 = GetModel(target.Index("Cat1"))?.PagingInfo.TotalItems;
