@@ -16,6 +16,8 @@ builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 builder.Services.AddScoped(SessionCart.GetCart);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddServerSideBlazor();
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddDistributedMemoryCache();
@@ -52,6 +54,8 @@ app.MapControllerRoute("pagination",
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
+app.MapBlazorHub();
+app.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
 
 SeedData.EnsurePopulated(app);
 
