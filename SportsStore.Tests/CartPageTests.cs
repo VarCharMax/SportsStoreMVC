@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Routing;
-using Moq;
+﻿using Moq;
 using SportsStore.Models;
 using SportsStore.Pages;
-using System.Text;
-using System.Text.Json;
 
 namespace SportsStore.Tests
 {
@@ -43,11 +37,9 @@ namespace SportsStore.Tests
       // - create a mock repository
       Mock<IStoreRepository> mockRepo = new();
 
-      mockRepo.Setup(m => m.Products).Returns((new Product[] {
-        new() { ProductID = 1, Name = "P1" }
-        }).AsQueryable());
+      mockRepo.Setup(m => m.Products).Returns((new Product[] { new() { ProductID = 1, Name = "P1" } }).AsQueryable());
 
-      Cart? testCart = new();
+      Cart testCart = new();
 
       // Action
       CartModel cartModel = new(mockRepo.Object, testCart);

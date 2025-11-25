@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using SportsStore.Models;
-using static System.Net.Mime.MediaTypeNames;
+﻿using SportsStore.Models;
 
 namespace SportsStore.Tests
 {

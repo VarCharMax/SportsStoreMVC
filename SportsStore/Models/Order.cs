@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Models
 {
@@ -18,7 +16,9 @@ namespace SportsStore.Models
 
     [Required(ErrorMessage = "Please enter the first address line")]
     public string? Line1 { get; set; }
+
     public string? Line2 { get; set; }
+
     public string? Line3 { get; set; }
 
     [Required(ErrorMessage = "Please enter a city name")]
