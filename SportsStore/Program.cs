@@ -42,9 +42,9 @@ else
 
 // Required for Docker.
 app.UseRequestLocalization(opts => {
-  opts.AddSupportedCultures("en-AU")
-  .AddSupportedUICultures("en-AU")
-  .SetDefaultCulture("en-AU");
+  opts.AddSupportedCultures("en-US")
+  .AddSupportedUICultures("en-US")
+  .SetDefaultCulture("en-US");
 });
 
 app.UseStaticFiles();
