@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SportsStore.Models
 {
@@ -31,5 +33,8 @@ namespace SportsStore.Models
     public string? Country { get; set; }
 
     public bool GiftWrap { get; set; }
+
+    [BindNever]
+    public bool Shipped { get; set; }
   }
 }
