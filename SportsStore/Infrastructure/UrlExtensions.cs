@@ -1,4 +1,4 @@
-﻿namespace SportsStore.Infrastructure
+namespace SportsStore.Infrastructure
 {
   public static class UrlExtensions
   {
