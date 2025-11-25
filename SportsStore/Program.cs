@@ -31,15 +31,21 @@ builder.Services.AddSession();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsProduction())
 {
-  app.UseExceptionHandler("/Home/Error");
-  app.UseHsts();
+  app.UseExceptionHandler("/error");
 }
 else
 {
   app.UseDeveloperExceptionPage();
 }
+
+// Required for Docker.
+app.UseRequestLocalization(opts => {
+  opts.AddSupportedCultures("en-AU")
+  .AddSupportedUICultures("en-AU")
+  .SetDefaultCulture("en-AU");
+});
 
 app.UseStaticFiles();
 app.UseSession();
