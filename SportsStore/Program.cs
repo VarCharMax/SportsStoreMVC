@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsStore.Models;
 
@@ -7,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<StoreDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration["ConnectionStrings:SportsStoreConnection"] ??
+      builder.Configuration["ConnectionStrings:SportsStoreConnection"] ??
         throw new InvalidOperationException("Connection string 'SportsStoreConnection' not found.")));
 
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
@@ -17,6 +18,11 @@ builder.Services.AddScoped(SessionCart.GetCart);
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:IdentityConnection"]));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+  .AddEntityFrameworkStores<AppIdentityDbContext>();
 
 builder.Services.AddRazorPages();
 
@@ -38,6 +44,9 @@ else
 app.UseStaticFiles();
 app.UseSession();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllerRoute("catpage",
     "{category}/Page{productPage:int}",
     new { Controller = "Home", action = "Index" });
@@ -58,5 +67,6 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
 
 SeedData.EnsurePopulated(app);
+IdentitySeedData.EnsurePopulated(app);
 
 app.Run();
